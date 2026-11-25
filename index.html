@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPEG Cloud - Sistem Informasi Kepegawaian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-indigo-700 text-white shadow-lg sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fa-solid fa-users-gear text-2xl text-indigo-200"></i>
+                    <div>
+                        <span class="font-bold text-xl tracking-tight">SIMPEG<span class="text-indigo-200 font-light">Cloud</span></span>
+                        <span class="hidden sm:inline-block text-xs bg-indigo-800 px-2 py-0.5 rounded ml-2">v1.0</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="resetData()" title="Reset ke 55 Data Awal" class="bg-indigo-600 hover:bg-indigo-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 border border-indigo-400">
+                        <i class="fa-solid fa-rotate-right"></i> <span class="hidden sm:inline">Reset Data</span>
+                    </button>
+                    <button onclick="exportCSV()" class="bg-emerald-600 hover:bg-emerald-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-file-csv"></i> <span>Ekspor CSV</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Dashboard Statistik -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Total Pegawai</p>
+                    <h3 id="stat-total" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Status Aktif</p>
+                    <h3 id="stat-aktif" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Cuti / Non-Aktif</p>
+                    <h3 id="stat-nonaktif" class="text-2xl font-bold text-amber-600 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-user-clock"></i>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-slate-500 font-medium">Total Departemen</p>
+                    <h3 id="stat-dept" class="text-2xl font-bold text-blue-600 mt-1">0</h3>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar Pencarian, Filter & Tambah -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto flex-1">
+                <div class="relative flex-1 max-w-md">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
+                    <input type="text" id="searchInput" placeholder="Cari NIP, Nama, atau Jabatan..." 
+                        class="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                </div>
+                <select id="filterDept" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <option value="">Semua Departemen</option>
+                    <option value="Teknologi Informasi">Teknologi Informasi</option>
+                    <option value="Keuangan & Akuntansi">Keuangan & Akuntansi</option>
+                    <option value="Sumber Daya Manusia">Sumber Daya Manusia</option>
+                    <option value="Operasional & Logistik">Operasional & Logistik</option>
+                    <option value="Pemasaran & Humas">Pemasaran & Humas</option>
+                    <option value="Hukum & Kepatuhan">Hukum & Kepatuhan</option>
+                </select>
+                <select id="filterStatus" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                    <option value="">Semua Status</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Cuti">Cuti</option>
+                    <option value="Non-Aktif">Non-Aktif</option>
+                </select>
+            </div>
+            <button onclick="openModal()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                <i class="fa-solid fa-plus"></i> Tambah Pegawai
+            </button>
+        </div>
+
+        <!-- Tabel Data Pegawai -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3.5 px-4 font-semibold">No</th>
+                            <th class="py-3.5 px-4 font-semibold">NIP</th>
+                            <th class="py-3.5 px-4 font-semibold">Nama Lengkap</th>
+                            <th class="py-3.5 px-4 font-semibold">Departemen</th>
+                            <th class="py-3.5 px-4 font-semibold">Jabatan</th>
+                            <th class="py-3.5 px-4 font-semibold">Golongan</th>
+                            <th class="py-3.5 px-4 font-semibold">Status</th>
+                            <th class="py-3.5 px-4 font-semibold text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody" class="divide-y divide-slate-200 text-sm">
+                        <!-- Baris data dirender lewat JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-600">
+                <div id="paginationInfo">Menampilkan 0 dari 0 data</div>
+                <div class="flex items-center space-x-1" id="paginationControls"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Form Tambah/Edit Pegawai -->
+    <div id="employeeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-lg overflow-hidden animate-fadeIn">
+            <div class="px-6 py-4 bg-indigo-700 text-white flex justify-between items-center">
+                <h3 id="modalTitle" class="font-bold text-lg">Tambah Data Pegawai</h3>
+                <button onclick="closeModal()" class="text-indigo-200 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <form id="employeeForm" class="p-6 space-y-4">
+                <input type="hidden" id="empId">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">NIP *</label>
+                        <input type="text" id="empNip" required placeholder="Contoh: 199508172020011001" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Nama Lengkap *</label>
+                        <input type="text" id="empNama" required placeholder="Nama & Gelar" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Departemen *</label>
+                        <select id="empDept" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="Teknologi Informasi">Teknologi Informasi</option>
+                            <option value="Keuangan & Akuntansi">Keuangan & Akuntansi</option>
+                            <option value="Sumber Daya Manusia">Sumber Daya Manusia</option>
+                            <option value="Operasional & Logistik">Operasional & Logistik</option>
+                            <option value="Pemasaran & Humas">Pemasaran & Humas</option>
+                            <option value="Hukum & Kepatuhan">Hukum & Kepatuhan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Jabatan *</label>
+                        <input type="text" id="empJabatan" required placeholder="Contoh: Analis Sistem" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Golongan *</label>
+                        <select id="empGolongan" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="III/a">III/a</option>
+                            <option value="III/b">III/b</option>
+                            <option value="III/c">III/c</option>
+                            <option value="III/d">III/d</option>
+                            <option value="IV/a">IV/a</option>
+                            <option value="IV/b">IV/b</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status *</label>
+                        <select id="empStatus" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Cuti">Cuti</option>
+                            <option value="Non-Aktif">Non-Aktif</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tgl Masuk *</label>
+                        <input type="date" id="empTglMasuk" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Email & No. Telepon *</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <input type="email" id="empEmail" required placeholder="email@instansi.go.id" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="empTelepon" required placeholder="0812xxxxxxxx" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-slate-200 flex justify-end gap-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Pegawai -->
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fadeIn">
+            <div class="px-6 py-4 bg-slate-800 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg">Detail Profil Pegawai</h3>
+                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div id="detailContent" class="p-6 space-y-3 text-sm"></div>
+            <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+                <button onclick="closeDetailModal()" class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-200 hover:bg-slate-300 rounded-lg">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
