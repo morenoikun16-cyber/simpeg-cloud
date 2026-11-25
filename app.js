@@ -1,4 +1,4 @@
-// Dataset 55 Pegawai Awal (Memenuhi syarat minimal 50 data pegawai)
+// Dataset 55 Pegawai Awal
 const initialEmployees = [
     { id: 1, nip: "198503122010011001", nama: "Dr. Hendra Wijaya, M.Kom.", dept: "Teknologi Informasi", jabatan: "Kepala Divisi TI", golongan: "IV/b", status: "Aktif", tglMasuk: "2010-01-15", email: "hendra.wijaya@instansi.go.id", telepon: "081234567801" },
     { id: 2, nip: "198807242012122002", nama: "Siti Rahmawati, S.E., M.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Manajer Anggaran", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-12-01", email: "siti.rahmawati@instansi.go.id", telepon: "081234567802" },
@@ -57,25 +57,26 @@ const initialEmployees = [
     { id: 55, nip: "199706252022011055", nama: "Jefri Nichol, S.M.", dept: "Sumber Daya Manusia", jabatan: "Staf Rekrutmen Digital", golongan: "III/a", status: "Aktif", tglMasuk: "2022-01-17", email: "jefri.nichol@instansi.go.id", telepon: "081234567855" }
 ];
 
-// State Aplikasi
+const STORAGE_KEY = 'simpeg_employees_v2';
 let employees = [];
 let currentPage = 1;
-const rowsPerPage = 10;
+const rowsPerPage = 15;
+let manualEmailEdited = false;
 
-// Inisialisasi Data dari LocalStorage atau Seed 55 Data
 function initApp() {
-    const storedData = localStorage.getItem('simpeg_employees_v1');
+    const storedData = localStorage.getItem(STORAGE_KEY);
     if (storedData) {
         employees = JSON.parse(storedData);
     } else {
         employees = [...initialEmployees];
         saveToStorage();
     }
+    populateJabatanOptions();
     renderAll();
 }
 
 function saveToStorage() {
-    localStorage.setItem('simpeg_employees_v1', JSON.stringify(employees));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
 }
 
 function resetData() {
@@ -83,11 +84,36 @@ function resetData() {
         employees = [...initialEmployees];
         saveToStorage();
         currentPage = 1;
+        populateJabatanOptions();
         renderAll();
     }
 }
 
-// Render Statistik & Tabel
+function populateJabatanOptions() {
+    const uniqueJabatan = [...new Set(employees.map(e => e.jabatan))].sort((a, b) => a.localeCompare(b, 'id'));
+    const filterJabatan = document.getElementById('filterJabatan');
+    const currentVal = filterJabatan.value;
+
+    filterJabatan.innerHTML = `<option value="">Semua Jabatan</option>`;
+    uniqueJabatan.forEach(j => {
+        filterJabatan.innerHTML += `<option value="${escapeHtml(j)}">${escapeHtml(j)}</option>`;
+    });
+    if (uniqueJabatan.includes(currentVal)) {
+        filterJabatan.value = currentVal;
+    }
+
+    const datalist = document.getElementById('jabatanList');
+    datalist.innerHTML = uniqueJabatan.map(j => `<option value="${escapeHtml(j)}"></option>`).join('');
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
 function renderAll() {
     updateStats();
     renderTable();
@@ -105,78 +131,138 @@ function updateStats() {
     document.getElementById('stat-dept').textContent = depts;
 }
 
-function getFilteredData() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
+function getSortedAndFilteredData() {
+    const search = document.getElementById('searchInput').value.trim().toLowerCase();
     const dept = document.getElementById('filterDept').value;
+    const jabatan = document.getElementById('filterJabatan').value;
+    const golongan = document.getElementById('filterGolongan').value;
     const status = document.getElementById('filterStatus').value;
+    const groupBy = document.getElementById('groupBySelect').value;
 
-    return employees.filter(emp => {
-        const matchSearch = emp.nip.toLowerCase().includes(search) ||
-                            emp.nama.toLowerCase().includes(search) ||
-                            emp.jabatan.toLowerCase().includes(search);
-        const matchDept = dept === "" || emp.dept === dept;
-        const matchStatus = status === "" || emp.status === status;
-        return matchSearch && matchDept && matchStatus;
+    let list = employees.filter(emp => {
+        const matchSearch = !search ||
+            emp.nip.toLowerCase().includes(search) ||
+            emp.nama.toLowerCase().includes(search) ||
+            emp.jabatan.toLowerCase().includes(search) ||
+            emp.dept.toLowerCase().includes(search) ||
+            emp.golongan.toLowerCase().includes(search);
+        const matchDept = !dept || emp.dept === dept;
+        const matchJabatan = !jabatan || emp.jabatan === jabatan;
+        const matchGolongan = !golongan || emp.golongan === golongan;
+        const matchStatus = !status || emp.status === status;
+        return matchSearch && matchDept && matchJabatan && matchGolongan && matchStatus;
     });
+
+    // Urutkan utama berdasarkan Nama Lengkap sesuai abjad (A-Z)
+    list.sort((a, b) => a.nama.localeCompare(b.nama, 'id', { sensitivity: 'base' }));
+
+    // Jika dikelompokkan per kategori, urutkan kategori A-Z lalu nama A-Z di dalamnya
+    if (groupBy !== 'none') {
+        list.sort((a, b) => {
+            const catA = (a[groupBy] || '').toString();
+            const catB = (b[groupBy] || '').toString();
+            const cmpCat = catA.localeCompare(catB, 'id', { sensitivity: 'base' });
+            if (cmpCat !== 0) return cmpCat;
+            return a.nama.localeCompare(b.nama, 'id', { sensitivity: 'base' });
+        });
+    }
+
+    return list;
+}
+
+function getGroupedEntries(list, groupBy) {
+    if (groupBy === 'none') {
+        return [{ groupName: null, items: list }];
+    }
+    const map = new Map();
+    list.forEach(emp => {
+        const key = emp[groupBy] || 'Lainnya';
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push(emp);
+    });
+    return Array.from(map.entries()).map(([groupName, items]) => ({ groupName, items }));
 }
 
 function renderTable() {
-    const filtered = getFilteredData();
+    const data = getSortedAndFilteredData();
+    const groupBy = document.getElementById('groupBySelect').value;
     const tbody = document.getElementById('employeeTableBody');
     tbody.innerHTML = '';
 
-    const totalPages = Math.ceil(filtered.length / rowsPerPage) || 1;
+    const totalPages = Math.ceil(data.length / rowsPerPage) || 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
     const start = (currentPage - 1) * rowsPerPage;
     const end = start + rowsPerPage;
-    const pageData = filtered.slice(start, end);
+    const pageData = data.slice(start, end);
 
     if (pageData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data pegawai yang cocok dengan pencarian.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-slate-400">Tidak ada data pegawai yang cocok dengan filter.</td></tr>`;
     } else {
-        pageData.forEach((emp, index) => {
-            const badgeColor = emp.status === 'Aktif' 
-                ? 'bg-emerald-100 text-emerald-700 border-emerald-200' 
-                : emp.status === 'Cuti' 
-                ? 'bg-amber-100 text-amber-700 border-amber-200' 
-                : 'bg-rose-100 text-rose-700 border-rose-200';
+        const grouped = getGroupedEntries(pageData, groupBy);
+        const labelMap = {
+            dept: 'Departemen',
+            jabatan: 'Jabatan',
+            golongan: 'Golongan',
+            status: 'Status'
+        };
+        let rowCounter = start + 1;
 
-            const row = `
-                <tr class="hover:bg-slate-50 transition">
-                    <td class="py-3 px-4 text-slate-500">${start + index + 1}</td>
-                    <td class="py-3 px-4 font-mono text-xs text-slate-600">${emp.nip}</td>
-                    <td class="py-3 px-4 font-medium text-slate-800">${emp.nama}</td>
-                    <td class="py-3 px-4 text-slate-600">${emp.dept}</td>
-                    <td class="py-3 px-4 text-slate-600">${emp.jabatan}</td>
-                    <td class="py-3 px-4"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-semibold">${emp.golongan}</span></td>
-                    <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeColor}">${emp.status}</span></td>
-                    <td class="py-3 px-4 text-center space-x-1">
-                        <button onclick="viewDetail(${emp.id})" title="Detail" class="text-blue-600 hover:bg-blue-50 p-1.5 rounded transition"><i class="fa-solid fa-eye"></i></button>
-                        <button onclick="editEmployee(${emp.id})" title="Edit" class="text-amber-600 hover:bg-amber-50 p-1.5 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="deleteEmployee(${emp.id})" title="Hapus" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded transition"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                </tr>
-            `;
-            tbody.innerHTML += row;
+        grouped.forEach(group => {
+            if (group.groupName !== null) {
+                const headerLabel = labelMap[groupBy] || 'Kategori';
+                tbody.innerHTML += `
+                    <tr class="group-header-row">
+                        <td colspan="8" class="py-2.5 px-4 text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-layer-group mr-1.5"></i> ${headerLabel}: ${escapeHtml(group.groupName)}
+                            <span class="ml-2 bg-indigo-200/80 text-indigo-900 px-2 py-0.5 rounded-full text-[11px]">${group.items.length} pegawai</span>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            group.items.forEach(emp => {
+                const badgeColor = emp.status === 'Aktif'
+                    ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                    : emp.status === 'Cuti'
+                    ? 'bg-amber-100 text-amber-700 border-amber-200'
+                    : 'bg-rose-100 text-rose-700 border-rose-200';
+
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-4 text-slate-500">${rowCounter++}</td>
+                        <td class="py-3 px-4 font-mono text-xs text-slate-600">${escapeHtml(emp.nip)}</td>
+                        <td class="py-3 px-4 font-medium text-slate-800">${escapeHtml(emp.nama)}</td>
+                        <td class="py-3 px-4 text-slate-600">${escapeHtml(emp.dept)}</td>
+                        <td class="py-3 px-4 text-slate-600">${escapeHtml(emp.jabatan)}</td>
+                        <td class="py-3 px-4"><span class="bg-slate-100 text-slate-700 px-2 py-0.5 rounded text-xs font-semibold">${escapeHtml(emp.golongan)}</span></td>
+                        <td class="py-3 px-4"><span class="px-2.5 py-0.5 rounded-full text-xs font-medium border ${badgeColor}">${escapeHtml(emp.status)}</span></td>
+                        <td class="py-3 px-4 text-center space-x-1 whitespace-nowrap">
+                            <button onclick="viewDetail(${emp.id})" title="Detail" class="text-blue-600 hover:bg-blue-50 p-1.5 rounded transition"><i class="fa-solid fa-eye"></i></button>
+                            <button onclick="editEmployee(${emp.id})" title="Edit" class="text-amber-600 hover:bg-amber-50 p-1.5 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteEmployee(${emp.id})" title="Hapus" class="text-rose-600 hover:bg-rose-50 p-1.5 rounded transition"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
         });
     }
 
-    renderPagination(filtered.length, totalPages, start, end);
+    renderPagination(data.length, totalPages, start, end);
 }
 
 function renderPagination(totalItems, totalPages, start, end) {
     const info = document.getElementById('paginationInfo');
     const controls = document.getElementById('paginationControls');
-    
+
     const showStart = totalItems === 0 ? 0 : start + 1;
     const showEnd = Math.min(end, totalItems);
     info.textContent = `Menampilkan ${showStart}–${showEnd} dari ${totalItems} pegawai`;
 
     controls.innerHTML = '';
     for (let i = 1; i <= totalPages; i++) {
-        const activeClass = i === currentPage 
-            ? 'bg-indigo-600 text-white border-indigo-600' 
+        const activeClass = i === currentPage
+            ? 'bg-indigo-600 text-white border-indigo-600'
             : 'bg-white text-slate-600 border-slate-300 hover:bg-slate-100';
         controls.innerHTML += `
             <button onclick="goToPage(${i})" class="px-3 py-1 border rounded text-xs font-medium transition ${activeClass}">
@@ -191,14 +277,56 @@ function goToPage(page) {
     renderTable();
 }
 
-// CRUD Operations
+// Auto-fill nilai saat tambah pegawai
+function generateAutoNip() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const seq = String(employees.length + 1).padStart(6, '0');
+    return `${y}${m}${d}202601${seq}`;
+}
+
+function generateAutoPhone() {
+    const seq = String(7800 + employees.length + 1).padStart(4, '0');
+    return `08123456${seq}`;
+}
+
+function syncAutoContact() {
+    if (manualEmailEdited) return;
+    const namaRaw = document.getElementById('empNama').value.trim().toLowerCase();
+    const cleaned = namaRaw
+        .replace(/[^a-z\s]/g, '')
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0, 2)
+        .join('.');
+    document.getElementById('empEmail').value = cleaned ? `${cleaned}@instansi.go.id` : `pegawai.${employees.length + 1}@instansi.go.id`;
+}
+
+document.getElementById('empEmail').addEventListener('input', () => {
+    manualEmailEdited = true;
+});
+
 function openModal(isEdit = false) {
     document.getElementById('employeeModal').classList.remove('hidden');
     document.getElementById('employeeModal').classList.add('flex');
     if (!isEdit) {
+        manualEmailEdited = false;
         document.getElementById('modalTitle').textContent = 'Tambah Data Pegawai';
+        document.getElementById('autoFillNotice').classList.remove('hidden');
         document.getElementById('employeeForm').reset();
         document.getElementById('empId').value = '';
+        document.getElementById('empNip').value = generateAutoNip();
+        document.getElementById('empJabatan').value = 'Staf Administrasi';
+        document.getElementById('empGolongan').value = 'III/a';
+        document.getElementById('empStatus').value = 'Aktif';
+        document.getElementById('empTglMasuk').value = new Date().toISOString().split('T')[0];
+        document.getElementById('empEmail').value = `pegawai.${employees.length + 1}@instansi.go.id`;
+        document.getElementById('empTelepon').value = generateAutoPhone();
+    } else {
+        document.getElementById('autoFillNotice').classList.add('hidden');
     }
 }
 
@@ -227,10 +355,11 @@ document.getElementById('employeeForm').addEventListener('submit', function(e) {
         const index = employees.findIndex(item => item.id === parseInt(id));
         if (index !== -1) employees[index] = empData;
     } else {
-        employees.unshift(empData);
+        employees.push(empData);
     }
 
     saveToStorage();
+    populateJabatanOptions();
     closeModal();
     renderAll();
 });
@@ -239,6 +368,7 @@ function editEmployee(id) {
     const emp = employees.find(e => e.id === id);
     if (!emp) return;
 
+    manualEmailEdited = true;
     document.getElementById('modalTitle').textContent = 'Edit Data Pegawai';
     document.getElementById('empId').value = emp.id;
     document.getElementById('empNip').value = emp.nip;
@@ -256,9 +386,11 @@ function editEmployee(id) {
 
 function deleteEmployee(id) {
     const emp = employees.find(e => e.id === id);
+    if (!emp) return;
     if (confirm(`Yakin ingin menghapus data pegawai "${emp.nama}"?`)) {
         employees = employees.filter(e => e.id !== id);
         saveToStorage();
+        populateJabatanOptions();
         renderAll();
     }
 }
@@ -270,21 +402,21 @@ function viewDetail(id) {
     document.getElementById('detailContent').innerHTML = `
         <div class="flex items-center space-x-3 pb-3 border-b border-slate-100">
             <div class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-lg">
-                ${emp.nama.charAt(0)}
+                ${escapeHtml(emp.nama.charAt(0))}
             </div>
             <div>
-                <h4 class="font-bold text-slate-800 text-base">${emp.nama}</h4>
-                <p class="text-xs font-mono text-slate-500">NIP: ${emp.nip}</p>
+                <h4 class="font-bold text-slate-800 text-base">${escapeHtml(emp.nama)}</h4>
+                <p class="text-xs font-mono text-slate-500">NIP: ${escapeHtml(emp.nip)}</p>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-y-2.5 pt-2">
-            <span class="text-slate-500">Departemen:</span><span class="font-medium text-slate-800">${emp.dept}</span>
-            <span class="text-slate-500">Jabatan:</span><span class="font-medium text-slate-800">${emp.jabatan}</span>
-            <span class="text-slate-500">Golongan:</span><span class="font-medium text-slate-800">${emp.golongan}</span>
-            <span class="text-slate-500">Status:</span><span class="font-medium text-slate-800">${emp.status}</span>
-            <span class="text-slate-500">Tanggal Masuk:</span><span class="font-medium text-slate-800">${emp.tglMasuk}</span>
-            <span class="text-slate-500">Email:</span><span class="font-medium text-slate-800 break-all">${emp.email}</span>
-            <span class="text-slate-500">No. Telepon:</span><span class="font-medium text-slate-800">${emp.telepon}</span>
+            <span class="text-slate-500">Departemen:</span><span class="font-medium text-slate-800">${escapeHtml(emp.dept)}</span>
+            <span class="text-slate-500">Jabatan:</span><span class="font-medium text-slate-800">${escapeHtml(emp.jabatan)}</span>
+            <span class="text-slate-500">Golongan:</span><span class="font-medium text-slate-800">${escapeHtml(emp.golongan)}</span>
+            <span class="text-slate-500">Status:</span><span class="font-medium text-slate-800">${escapeHtml(emp.status)}</span>
+            <span class="text-slate-500">Tanggal Masuk:</span><span class="font-medium text-slate-800">${escapeHtml(emp.tglMasuk)}</span>
+            <span class="text-slate-500">Email:</span><span class="font-medium text-slate-800 break-all">${escapeHtml(emp.email)}</span>
+            <span class="text-slate-500">No. Telepon:</span><span class="font-medium text-slate-800">${escapeHtml(emp.telepon)}</span>
         </div>
     `;
     document.getElementById('detailModal').classList.remove('hidden');
@@ -296,28 +428,85 @@ function closeDetailModal() {
     document.getElementById('detailModal').classList.remove('flex');
 }
 
-// Ekspor ke CSV
-function exportCSV() {
-    const filtered = getFilteredData();
-    const headers = ["NIP", "Nama Lengkap", "Departemen", "Jabatan", "Golongan", "Status", "Tanggal Masuk", "Email", "Telepon"];
-    const rows = filtered.map(e => [
-        `"${e.nip}"`, `"${e.nama}"`, `"${e.dept}"`, `"${e.jabatan}"`, `"${e.golongan}"`, `"${e.status}"`, `"${e.tglMasuk}"`, `"${e.email}"`, `"${e.telepon}"`
-    ]);
-    
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Data_Pegawai_SIMPEG.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+// Ekspor ke PDF Terkelompok per Kategori
+function exportPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("Pustaka PDF sedang dimuat atau tidak tersedia. Pastikan koneksi internet aktif lalu coba lagi.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+    const data = getSortedAndFilteredData();
+    const rawGroupBy = document.getElementById('groupBySelect').value;
+    const activeGroupBy = rawGroupBy === 'none' ? 'dept' : rawGroupBy;
+    const grouped = getGroupedEntries(data, activeGroupBy);
+
+    const groupLabelMap = {
+        dept: 'Departemen',
+        jabatan: 'Jabatan',
+        golongan: 'Golongan',
+        status: 'Status'
+    };
+
+    doc.setFontSize(15);
+    doc.setTextColor(30, 41, 59);
+    doc.text("LAPORAN DATA PEGAWAI - SIMPEG CLOUD", 14, 15);
+
+    doc.setFontSize(9.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Dikelompokkan per ${groupLabelMap[activeGroupBy]} | Diurutkan A–Z | Total Data: ${data.length} Pegawai`, 14, 21);
+
+    let startY = 26;
+
+    grouped.forEach((group, idx) => {
+        if (idx > 0) {
+            startY = doc.lastAutoTable.finalY + 8;
+            if (startY > 175) {
+                doc.addPage();
+                startY = 16;
+            }
+        }
+
+        doc.setFontSize(11);
+        doc.setTextColor(49, 46, 129);
+        doc.text(`${groupLabelMap[activeGroupBy]}: ${group.groupName} (${group.items.length} orang)`, 14, startY);
+
+        const bodyRows = group.items.map((emp, i) => [
+            i + 1,
+            emp.nip,
+            emp.nama,
+            emp.dept,
+            emp.jabatan,
+            emp.golongan,
+            emp.status,
+            emp.email,
+            emp.telepon
+        ]);
+
+        doc.autoTable({
+            startY: startY + 3,
+            head: [["No", "NIP", "Nama Lengkap", "Departemen", "Jabatan", "Gol.", "Status", "Email", "Telepon"]],
+            body: bodyRows,
+            theme: 'grid',
+            styles: { fontSize: 8, cellPadding: 2 },
+            headStyles: { fillColor: [67, 56, 202], textColor: 255 },
+            margin: { left: 14, right: 14 }
+        });
+    });
+
+    doc.save(`Laporan_SIMPEG_${groupLabelMap[activeGroupBy]}.pdf`);
 }
 
-// Event Listeners Pencarian & Filter
-document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; renderTable(); });
-document.getElementById('filterDept').addEventListener('change', () => { currentPage = 1; renderTable(); });
-document.getElementById('filterStatus').addEventListener('change', () => { currentPage = 1; renderTable(); });
+// Event Listeners Pencarian, Filter & Pengelompokan
+['searchInput', 'filterDept', 'filterJabatan', 'filterGolongan', 'filterStatus', 'groupBySelect'].forEach(id => {
+    const el = document.getElementById(id);
+    const evt = id === 'searchInput' ? 'input' : 'change';
+    el.addEventListener(evt, () => {
+        currentPage = 1;
+        renderTable();
+    });
+});
 
-// Jalankan aplikasi saat halaman dimuat
 document.addEventListener('DOMContentLoaded', initApp);

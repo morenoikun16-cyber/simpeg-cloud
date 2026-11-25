@@ -13,6 +13,14 @@
     animation: fadeIn 0.18s ease-out forwards;
 }
 
+.group-header-row td {
+    background-color: #eef2ff;
+    color: #312e81;
+    font-weight: 700;
+    border-top: 2px solid #c7d2fe;
+    border-bottom: 1px solid #c7d2fe;
+}
+
 /* Custom Scrollbar untuk tabel */
 ::-webkit-scrollbar {
     width: 6px;
