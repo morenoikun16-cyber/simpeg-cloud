@@ -12,160 +12,242 @@
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
-    <!-- Navbar -->
-    <nav class="bg-indigo-700 text-white shadow-lg sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
+    <!-- Halaman Login Admin -->
+    <div id="loginScreen" class="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-indigo-900 via-indigo-800 to-slate-900">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-indigo-100 animate-fadeIn">
+            <div class="px-6 py-6 bg-indigo-700 text-white">
                 <div class="flex items-center space-x-3">
-                    <i class="fa-solid fa-users-gear text-2xl text-indigo-200"></i>
+                    <div class="w-11 h-11 rounded-xl bg-indigo-500/40 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
                     <div>
                         <span class="font-bold text-xl tracking-tight">SIMPEG<span class="text-indigo-200 font-light">Cloud</span></span>
-                        <span class="hidden sm:inline-block text-xs bg-indigo-800 px-2 py-0.5 rounded ml-2">v2.0</span>
+                        <p id="loginCompanyName" class="text-xs text-indigo-100 mt-0.5 font-medium"></p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <button onclick="resetData()" title="Reset ke 55 Data Awal" class="bg-indigo-600 hover:bg-indigo-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 border border-indigo-400">
-                        <i class="fa-solid fa-rotate-right"></i> <span class="hidden sm:inline">Reset Data</span>
+                <h1 class="text-lg font-semibold mt-4">Login Admin Dashboard</h1>
+                <p class="text-xs text-indigo-200 mt-0.5">Masuk untuk mengelola data pegawai perusahaan.</p>
+            </div>
+
+            <form id="loginForm" class="p-6 space-y-4">
+                <div>
+                    <label for="loginUsername" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Username Admin</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        <input type="text" id="loginUsername" required placeholder="admin"
+                            class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="loginPassword" class="block text-xs font-semibold text-slate-600 uppercase mb-1">Password Admin</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                        <input type="password" id="loginPassword" required placeholder="••••••••"
+                            class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50 border border-indigo-200 rounded-lg px-3 py-2.5 text-xs text-indigo-800 flex items-center justify-between gap-2">
+                    <div>
+                        <span class="font-semibold">Akun Demo:</span>
+                        <span class="font-mono">admin</span> / <span class="font-mono">admin123</span>
+                    </div>
+                    <button type="button" onclick="fillDemoAdmin()" class="text-indigo-700 hover:text-indigo-900 underline font-medium">
+                        Isi Otomatis
                     </button>
-                    <button onclick="exportPDF()" class="bg-rose-600 hover:bg-rose-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
-                        <i class="fa-solid fa-file-pdf"></i> <span>Ekspor PDF</span>
-                    </button>
                 </div>
-            </div>
+
+                <p id="loginError" class="hidden text-xs text-rose-600 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2">
+                    Username atau password admin tidak sesuai.
+                </p>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition shadow">
+                    <i class="fa-solid fa-right-to-bracket mr-1.5"></i> Masuk ke Dashboard
+                </button>
+            </form>
         </div>
-    </nav>
+    </div>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Dashboard Statistik -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+    <!-- Aplikasi Utama (Setelah Login Admin) -->
+    <div id="appShell" class="hidden">
+        <!-- Navbar -->
+        <nav class="bg-indigo-700 text-white shadow-lg sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16 items-center gap-2">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <i class="fa-solid fa-users-gear text-2xl text-indigo-200 shrink-0"></i>
+                        <div class="truncate">
+                            <div class="flex items-center">
+                                <span class="font-bold text-xl tracking-tight">SIMPEG<span class="text-indigo-200 font-light">Cloud</span></span>
+                                <span class="hidden sm:inline-block text-xs bg-indigo-800 px-2 py-0.5 rounded ml-2">v2.1</span>
+                            </div>
+                            <p id="navbarCompanyName" class="text-xs text-indigo-100 truncate"></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 shrink-0">
+                        <button onclick="showDashboardSection()" class="bg-indigo-800 hover:bg-indigo-900 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 border border-indigo-500/60">
+                            <i class="fa-solid fa-gauge-high"></i> <span>Dashboard</span>
+                        </button>
+                        <button onclick="resetData()" title="Reset ke 50 Data Awal" class="bg-indigo-600 hover:bg-indigo-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 border border-indigo-400">
+                            <i class="fa-solid fa-rotate-right"></i> <span class="hidden sm:inline">Reset Data</span>
+                        </button>
+                        <button onclick="exportPDF()" class="bg-rose-600 hover:bg-rose-500 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow">
+                            <i class="fa-solid fa-file-pdf"></i> <span>Ekspor PDF</span>
+                        </button>
+                        <button onclick="logoutAdmin()" title="Keluar dari Akun Admin" class="bg-slate-900/40 hover:bg-slate-900/60 text-xs sm:text-sm px-3 py-2 rounded-lg transition flex items-center gap-1.5 border border-indigo-400/50">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span class="hidden md:inline">Logout</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Container -->
+        <main id="dashboardSection" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <!-- Banner Identitas Perusahaan & Admin -->
+            <div class="bg-white p-4 sm:p-5 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                    <p class="text-sm text-slate-500 font-medium">Total Pegawai</p>
-                    <h3 id="stat-total" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Dashboard Admin Kepegawaian</span>
+                    <h2 id="bannerCompanyName" class="text-lg sm:text-xl font-bold text-slate-800 mt-2"></h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Direktori & Manajemen 50 Pegawai Perusahaan</p>
                 </div>
-                <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-            </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-slate-500 font-medium">Status Aktif</p>
-                    <h3 id="stat-aktif" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
-                </div>
-                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-user-check"></i>
+                <div class="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5">
+                    <span class="text-slate-400">Login sebagai:</span>
+                    <strong id="activeAdminLabel" class="text-indigo-700 font-semibold ml-1">Admin</strong>
                 </div>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-slate-500 font-medium">Cuti / Non-Aktif</p>
-                    <h3 id="stat-nonaktif" class="text-2xl font-bold text-amber-600 mt-1">0</h3>
+
+            <!-- Dashboard Statistik -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Total Pegawai</p>
+                        <h3 id="stat-total" class="text-2xl font-bold text-slate-800 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
                 </div>
-                <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-user-clock"></i>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Status Aktif</p>
+                        <h3 id="stat-aktif" class="text-2xl font-bold text-emerald-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Cuti / Non-Aktif</p>
+                        <h3 id="stat-nonaktif" class="text-2xl font-bold text-amber-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-user-clock"></i>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Total Departemen</p>
+                        <h3 id="stat-dept" class="text-2xl font-bold text-blue-600 mt-1">0</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
                 </div>
             </div>
-            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-slate-500 font-medium">Total Departemen</p>
-                    <h3 id="stat-dept" class="text-2xl font-bold text-blue-600 mt-1">0</h3>
-                </div>
-                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-building"></i>
-                </div>
-            </div>
-        </div>
 
-        <!-- Toolbar Pencarian, Filter Kategori & Tambah -->
-        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col xl:flex-row gap-3 justify-between items-center">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 w-full xl:w-auto flex-1">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
-                    <input type="text" id="searchInput" placeholder="Cari NIP, Nama, Jabatan..." 
-                        class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
-                </div>
+            <!-- Toolbar Pencarian, Filter Kategori & Tambah -->
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col xl:flex-row gap-3 justify-between items-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5 w-full xl:w-auto flex-1">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
+                        <input type="text" id="searchInput" placeholder="Cari NIP, Nama, Jabatan..." 
+                            class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                    </div>
 
-                <select id="filterDept" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                    <option value="">Semua Departemen</option>
-                    <option value="Teknologi Informasi">Teknologi Informasi</option>
-                    <option value="Keuangan & Akuntansi">Keuangan & Akuntansi</option>
-                    <option value="Sumber Daya Manusia">Sumber Daya Manusia</option>
-                    <option value="Operasional & Logistik">Operasional & Logistik</option>
-                    <option value="Pemasaran & Humas">Pemasaran & Humas</option>
-                    <option value="Hukum & Kepatuhan">Hukum & Kepatuhan</option>
-                </select>
+                    <select id="filterDept" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="">Semua Departemen</option>
+                        <option value="Teknologi Informasi">Teknologi Informasi</option>
+                        <option value="Keuangan & Akuntansi">Keuangan & Akuntansi</option>
+                        <option value="Sumber Daya Manusia">Sumber Daya Manusia</option>
+                        <option value="Operasional & Logistik">Operasional & Logistik</option>
+                        <option value="Pemasaran & Humas">Pemasaran & Humas</option>
+                        <option value="Hukum & Kepatuhan">Hukum & Kepatuhan</option>
+                    </select>
 
-                <select id="filterJabatan" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                    <option value="">Semua Jabatan</option>
-                </select>
+                    <select id="filterJabatan" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="">Semua Jabatan</option>
+                    </select>
 
-                <select id="filterGolongan" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                    <option value="">Semua Golongan</option>
-                    <option value="III/a">III/a</option>
-                    <option value="III/b">III/b</option>
-                    <option value="III/c">III/c</option>
-                    <option value="III/d">III/d</option>
-                    <option value="IV/a">IV/a</option>
-                    <option value="IV/b">IV/b</option>
-                </select>
+                    <select id="filterGolongan" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="">Semua Golongan</option>
+                        <option value="III/a">III/a</option>
+                        <option value="III/b">III/b</option>
+                        <option value="III/c">III/c</option>
+                        <option value="III/d">III/d</option>
+                        <option value="IV/a">IV/a</option>
+                        <option value="IV/b">IV/b</option>
+                    </select>
 
-                <select id="filterStatus" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
-                    <option value="">Semua Status</option>
-                    <option value="Aktif">Aktif</option>
-                    <option value="Cuti">Cuti</option>
-                    <option value="Non-Aktif">Non-Aktif</option>
-                </select>
-            </div>
-
-            <div class="flex items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
-                <div class="flex items-center gap-2">
-                    <label for="groupBySelect" class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Kelompokkan:</label>
-                    <select id="groupBySelect" class="border border-indigo-200 bg-indigo-50 text-indigo-900 font-medium rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <option value="dept">Departemen</option>
-                        <option value="jabatan">Jabatan</option>
-                        <option value="golongan">Golongan</option>
-                        <option value="status">Status</option>
-                        <option value="none">Daftar Abjad (A–Z)</option>
+                    <select id="filterStatus" class="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                        <option value="">Semua Status</option>
+                        <option value="Aktif">Aktif</option>
+                        <option value="Cuti">Cuti</option>
+                        <option value="Non-Aktif">Non-Aktif</option>
                     </select>
                 </div>
 
-                <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
-                    <i class="fa-solid fa-plus"></i> Tambah Pegawai
-                </button>
-            </div>
-        </div>
+                <div class="flex items-center gap-2 w-full xl:w-auto justify-between xl:justify-end">
+                    <div class="flex items-center gap-2">
+                        <label for="groupBySelect" class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Kelompokkan:</label>
+                        <select id="groupBySelect" class="border border-indigo-200 bg-indigo-50 text-indigo-900 font-medium rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="dept">Departemen</option>
+                            <option value="jabatan">Jabatan</option>
+                            <option value="golongan">Golongan</option>
+                            <option value="status">Status</option>
+                            <option value="none">Daftar Abjad (A–Z)</option>
+                        </select>
+                    </div>
 
-        <!-- Tabel Data Pegawai Terkelompok -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
-                            <th class="py-3.5 px-4 font-semibold">No</th>
-                            <th class="py-3.5 px-4 font-semibold">NIP</th>
-                            <th class="py-3.5 px-4 font-semibold">Nama Lengkap (A–Z)</th>
-                            <th class="py-3.5 px-4 font-semibold">Departemen</th>
-                            <th class="py-3.5 px-4 font-semibold">Jabatan</th>
-                            <th class="py-3.5 px-4 font-semibold">Golongan</th>
-                            <th class="py-3.5 px-4 font-semibold">Status</th>
-                            <th class="py-3.5 px-4 font-semibold text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="employeeTableBody" class="divide-y divide-slate-200 text-sm">
-                        <!-- Dirender lewat JavaScript -->
-                    </tbody>
-                </table>
+                    <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-sm whitespace-nowrap">
+                        <i class="fa-solid fa-plus"></i> Tambah Pegawai
+                    </button>
+                </div>
             </div>
-            
-            <!-- Pagination -->
-            <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-600">
-                <div id="paginationInfo">Menampilkan 0 dari 0 data</div>
-                <div class="flex items-center space-x-1" id="paginationControls"></div>
+
+            <!-- Tabel Data Pegawai Terkelompok -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-3.5 px-4 font-semibold">No</th>
+                                <th class="py-3.5 px-4 font-semibold">NIP</th>
+                                <th class="py-3.5 px-4 font-semibold">Nama Lengkap (A–Z)</th>
+                                <th class="py-3.5 px-4 font-semibold">Departemen</th>
+                                <th class="py-3.5 px-4 font-semibold">Jabatan</th>
+                                <th class="py-3.5 px-4 font-semibold">Golongan</th>
+                                <th class="py-3.5 px-4 font-semibold">Status</th>
+                                <th class="py-3.5 px-4 font-semibold text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="employeeTableBody" class="divide-y divide-slate-200 text-sm">
+                            <!-- Dirender lewat JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="px-4 py-3 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-slate-600">
+                    <div id="paginationInfo">Menampilkan 0 dari 0 data</div>
+                    <div class="flex items-center space-x-1" id="paginationControls"></div>
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <!-- Modal Form Tambah/Edit Pegawai -->
     <div id="employeeModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
@@ -221,46 +303,4 @@
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status *</label>
-                        <select id="empStatus" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-white">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Cuti">Cuti</option>
-                            <option value="Non-Aktif">Non-Aktif</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tgl Masuk *</label>
-                        <input type="date" id="empTglMasuk" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Email & No. Telepon *</label>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <input type="email" id="empEmail" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <input type="text" id="empTelepon" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                    </div>
-                </div>
-                <div class="pt-4 border-t border-slate-200 flex justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
-                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow">Simpan Data</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Detail Pegawai -->
-    <div id="detailModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-fadeIn">
-            <div class="px-6 py-4 bg-slate-800 text-white flex justify-between items-center">
-                <h3 class="font-bold text-lg">Detail Profil Pegawai</h3>
-                <button onclick="closeDetailModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div id="detailContent" class="p-6 space-y-3 text-sm"></div>
-            <div class="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
-                <button onclick="closeDetailModal()" class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-200 hover:bg-slate-300 rounded-lg">Tutup</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+                        <select id="empStatus" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-

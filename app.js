@@ -1,69 +1,110 @@
-// Dataset 55 Pegawai Awal
+// Identitas Perusahaan & Kredensial Admin
+const COMPANY_NAME = "PT Nusantara Digital Integrasi";
+const ADMIN_CREDENTIALS = {
+    username: "admin",
+    password: "admin123",
+    displayName: "Administrator HRIS"
+};
+
+// Dataset 50 Pegawai Awal (Profesi disesuaikan dengan PT Nusantara Digital Integrasi)
 const initialEmployees = [
-    { id: 1, nip: "198503122010011001", nama: "Dr. Hendra Wijaya, M.Kom.", dept: "Teknologi Informasi", jabatan: "Kepala Divisi TI", golongan: "IV/b", status: "Aktif", tglMasuk: "2010-01-15", email: "hendra.wijaya@instansi.go.id", telepon: "081234567801" },
-    { id: 2, nip: "198807242012122002", nama: "Siti Rahmawati, S.E., M.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Manajer Anggaran", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-12-01", email: "siti.rahmawati@instansi.go.id", telepon: "081234567802" },
-    { id: 3, nip: "199001152014031003", nama: "Budi Santoso, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Koordinator Rekrutmen", golongan: "III/d", status: "Aktif", tglMasuk: "2014-03-10", email: "budi.santoso@instansi.go.id", telepon: "081234567803" },
-    { id: 4, nip: "199105092015022004", nama: "Dewi Lestari, S.T.", dept: "Operasional & Logistik", jabatan: "Supervisor Logistik", golongan: "III/c", status: "Aktif", tglMasuk: "2015-02-18", email: "dewi.lestari@instansi.go.id", telepon: "081234567804" },
-    { id: 5, nip: "199211302016041005", nama: "Ahmad Fauzi, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Analis Komunikasi Publik", golongan: "III/c", status: "Cuti", tglMasuk: "2016-04-05", email: "ahmad.fauzi@instansi.go.id", telepon: "081234567805" },
-    { id: 6, nip: "198709182011012006", nama: "Rina Kartika, S.H., M.H.", dept: "Hukum & Kepatuhan", jabatan: "Kepala Bagian Hukum", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-01-20", email: "rina.kartika@instansi.go.id", telepon: "081234567806" },
-    { id: 7, nip: "199402142018011007", nama: "Rizky Pratama, S.Kom.", dept: "Teknologi Informasi", jabatan: "System Administrator", golongan: "III/b", status: "Aktif", tglMasuk: "2018-01-12", email: "rizky.pratama@instansi.go.id", telepon: "081234567807" },
-    { id: 8, nip: "199506212019032008", nama: "Nadia Putri, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Staf Verifikasi Pajak", golongan: "III/b", status: "Aktif", tglMasuk: "2019-03-01", email: "nadia.putri@instansi.go.id", telepon: "081234567808" },
-    { id: 9, nip: "199308112017051009", nama: "Dimas Saputra, S.M.", dept: "Sumber Daya Manusia", jabatan: "Analis Kinerja Pegawai", golongan: "III/c", status: "Aktif", tglMasuk: "2017-05-15", email: "dimas.saputra@instansi.go.id", telepon: "081234567809" },
-    { id: 10, nip: "198912042013081010", nama: "Eko Prasetyo, S.T.", dept: "Operasional & Logistik", jabatan: "Kepala Gudang Pusat", golongan: "III/d", status: "Aktif", tglMasuk: "2013-08-22", email: "eko.prasetyo@instansi.go.id", telepon: "081234567810" },
-    { id: 11, nip: "199604172020022011", nama: "Fitri Handayani, S.Sos.", dept: "Pemasaran & Humas", jabatan: "Spesialis Media Sosial", golongan: "III/a", status: "Aktif", tglMasuk: "2020-02-10", email: "fitri.handayani@instansi.go.id", telepon: "081234567811" },
-    { id: 12, nip: "199103252015061012", nama: "Galih Permana, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Staf Audit Kepatuhan", golongan: "III/c", status: "Aktif", tglMasuk: "2015-06-19", email: "galih.permana@instansi.go.id", telepon: "081234567812" },
-    { id: 13, nip: "199708092021011013", nama: "Ilham Ramadhan, S.Kom.", dept: "Teknologi Informasi", jabatan: "Fullstack Developer", golongan: "III/a", status: "Aktif", tglMasuk: "2021-01-04", email: "ilham.ramadhan@instansi.go.id", telepon: "081234567813" },
-    { id: 14, nip: "199511122019022014", nama: "Maya Anggraini, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Bendahara Pengeluaran", golongan: "III/b", status: "Cuti", tglMasuk: "2019-02-14", email: "maya.anggraini@instansi.go.id", telepon: "081234567814" },
-    { id: 15, nip: "199007032014091015", nama: "Taufik Hidayat, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Spesialis Pelatihan", golongan: "III/d", status: "Aktif", tglMasuk: "2014-09-01", email: "taufik.hidayat@instansi.go.id", telepon: "081234567815" },
-    { id: 16, nip: "199205192016072016", nama: "Wulan Dari, S.T.", dept: "Operasional & Logistik", jabatan: "Perencana Distribusi", golongan: "III/c", status: "Aktif", tglMasuk: "2016-07-11", email: "wulan.dari@instansi.go.id", telepon: "081234567816" },
-    { id: 17, nip: "199801282022031017", nama: "Yoga Pratama, S.Ds.", dept: "Pemasaran & Humas", jabatan: "Desainer Grafis", golongan: "III/a", status: "Aktif", tglMasuk: "2022-03-01", email: "yoga.pratama@instansi.go.id", telepon: "081234567817" },
-    { id: 18, nip: "198604142010122018", nama: "Yuni Astuti, S.H., M.Kn.", dept: "Hukum & Kepatuhan", jabatan: "Analis Kontrak", golongan: "IV/a", status: "Aktif", tglMasuk: "2010-12-06", email: "yuni.astuti@instansi.go.id", telepon: "081234567818" },
-    { id: 19, nip: "199310052018031019", nama: "Fajar Nugroho, S.TI.", dept: "Teknologi Informasi", jabatan: "Database Administrator", golongan: "III/b", status: "Aktif", tglMasuk: "2018-03-19", email: "fajar.nugroho@instansi.go.id", telepon: "081234567819" },
-    { id: 20, nip: "199609122020082020", nama: "Anisa Rahma, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Analis Laporan Keuangan", golongan: "III/a", status: "Aktif", tglMasuk: "2020-08-17", email: "anisa.rahma@instansi.go.id", telepon: "081234567820" },
-    { id: 21, nip: "198802222012041021", nama: "Bayu Setiawan, S.E.", dept: "Sumber Daya Manusia", jabatan: "Manajer Hubungan Industrial", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-04-02", email: "bayu.setiawan@instansi.go.id", telepon: "081234567821" },
-    { id: 22, nip: "199407162018092022", nama: "Citra Kirana, S.Log.", dept: "Operasional & Logistik", jabatan: "Staf Pengadaan Barang", golongan: "III/b", status: "Aktif", tglMasuk: "2018-09-10", email: "citra.kirana@instansi.go.id", telepon: "081234567822" },
-    { id: 23, nip: "199112082015111023", nama: "Deni Kurniawan, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Koordinator Event", golongan: "III/c", status: "Non-Aktif", tglMasuk: "2015-11-23", email: "deni.kurniawan@instansi.go.id", telepon: "081234567823" },
-    { id: 24, nip: "199503302019062024", nama: "Elsa Safitri, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Staf Legal & Perizinan", golongan: "III/b", status: "Aktif", tglMasuk: "2019-06-15", email: "elsa.safitri@instansi.go.id", telepon: "081234567824" },
-    { id: 25, nip: "199711112021071025", nama: "Farhan Maulana, S.Kom.", dept: "Teknologi Informasi", jabatan: "Network Security Engineer", golongan: "III/a", status: "Aktif", tglMasuk: "2021-07-01", email: "farhan.maulana@instansi.go.id", telepon: "081234567825" },
-    { id: 26, nip: "198906072013022026", nama: "Gita Gutawa, S.E., M.M.", dept: "Keuangan & Akuntansi", jabatan: "Kepala Subbagian Akuntansi", golongan: "III/d", status: "Aktif", tglMasuk: "2013-02-11", email: "gita.gutawa@instansi.go.id", telepon: "081234567826" },
-    { id: 27, nip: "199601192020041027", nama: "Hafizah Nur, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Staf Administrasi Kepegawaian", golongan: "III/a", status: "Aktif", tglMasuk: "2020-04-20", email: "hafizah.nur@instansi.go.id", telepon: "081234567827" },
-    { id: 28, nip: "199004252014061028", nama: "Irfan Hakim, S.T.", dept: "Operasional & Logistik", jabatan: "Inspektur Keselamatan Kerja", golongan: "III/d", status: "Aktif", tglMasuk: "2014-06-09", email: "irfan.hakim@instansi.go.id", telepon: "081234567828" },
-    { id: 29, nip: "199309142017082029", nama: "Julia Perez, S.Sos.", dept: "Pemasaran & Humas", jabatan: "Hubungan Media & Pers", golongan: "III/c", status: "Aktif", tglMasuk: "2017-08-14", email: "julia.perez@instansi.go.id", telepon: "081234567829" },
-    { id: 30, nip: "198712292011051030", nama: "Kevin Sanjaya, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Mediator Internal", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-05-02", email: "kevin.sanjaya@instansi.go.id", telepon: "081234567830" },
-    { id: 31, nip: "199805032022082031", nama: "Larasati Putri, S.Kom.", dept: "Teknologi Informasi", jabatan: "UI/UX Designer", golongan: "III/a", status: "Aktif", tglMasuk: "2022-08-08", email: "larasati.putri@instansi.go.id", telepon: "081234567831" },
-    { id: 32, nip: "199208172016091032", nama: "Muhammad Iqbal, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Auditor Internal", golongan: "III/c", status: "Aktif", tglMasuk: "2016-09-19", email: "m.iqbal@instansi.go.id", telepon: "081234567832" },
-    { id: 33, nip: "199412212018112033", nama: "Novita Sari, S.M.", dept: "Sumber Daya Manusia", jabatan: "Analis Kompensasi & Benefit", golongan: "III/b", status: "Aktif", tglMasuk: "2018-11-05", email: "novita.sari@instansi.go.id", telepon: "081234567833" },
-    { id: 34, nip: "198810102012071034", nama: "Oki Setiana, S.T.", dept: "Operasional & Logistik", jabatan: "Manajer Operasional Lapangan", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-07-16", email: "oki.setiana@instansi.go.id", telepon: "081234567834" },
-    { id: 35, nip: "199703152021092035", nama: "Putri Marino, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Content Strategist", golongan: "III/a", status: "Cuti", tglMasuk: "2021-09-13", email: "putri.marino@instansi.go.id", telepon: "081234567835" },
-    { id: 36, nip: "199106282015041036", nama: "Qori Sandioriva, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Analis Regulasi", golongan: "III/c", status: "Aktif", tglMasuk: "2015-04-27", email: "qori.sandioriva@instansi.go.id", telepon: "081234567836" },
-    { id: 37, nip: "199509092019101037", nama: "Reza Rahadian, S.Kom.", dept: "Teknologi Informasi", jabatan: "Cloud Infrastructure Engineer", golongan: "III/b", status: "Aktif", tglMasuk: "2019-10-07", email: "reza.rahadian@instansi.go.id", telepon: "081234567837" },
-    { id: 38, nip: "199011242014122038", nama: "Shinta Bachir, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Staf Perbendaharaan", golongan: "III/d", status: "Aktif", tglMasuk: "2014-12-01", email: "shinta.bachir@instansi.go.id", telepon: "081234567838" },
-    { id: 39, nip: "199607022020111039", nama: "Tio Pakusadewo, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Staf Pengembangan Karir", golongan: "III/a", status: "Aktif", tglMasuk: "2020-11-16", email: "tio.pakusadewo@instansi.go.id", telepon: "081234567839" },
-    { id: 40, nip: "199304182017022040", nama: "Ussy Sulistiawaty, S.T.", dept: "Operasional & Logistik", jabatan: "Koordinator Armada", golongan: "III/c", status: "Aktif", tglMasuk: "2017-02-20", email: "ussy.s@instansi.go.id", telepon: "081234567840" },
-    { id: 41, nip: "199809272023011041", nama: "Vino Bastian, S.Kom.", dept: "Teknologi Informasi", jabatan: "IT Support Specialist", golongan: "III/a", status: "Aktif", tglMasuk: "2023-01-09", email: "vino.bastian@instansi.go.id", telepon: "081234567841" },
-    { id: 42, nip: "198901132013052042", nama: "Winda Viska, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Koordinator Aset & Inventaris", golongan: "III/d", status: "Aktif", tglMasuk: "2013-05-13", email: "winda.viska@instansi.go.id", telepon: "081234567842" },
-    { id: 43, nip: "199405292018041043", nama: "Xavier Malik, S.M.", dept: "Sumber Daya Manusia", jabatan: "Staf Payroll & Absensi", golongan: "III/b", status: "Aktif", tglMasuk: "2018-04-23", email: "xavier.malik@instansi.go.id", telepon: "081234567843" },
-    { id: 44, nip: "199108042015092044", nama: "Yasmine Wildblood, S.Log.", dept: "Operasional & Logistik", jabatan: "Analis Rantai Pasok", golongan: "III/c", status: "Non-Aktif", tglMasuk: "2015-09-14", email: "yasmine.w@instansi.go.id", telepon: "081234567844" },
-    { id: 45, nip: "199702112021041045", nama: "Zulfikar Ali, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Staf Dokumentasi & Publikasi", golongan: "III/a", status: "Aktif", tglMasuk: "2021-04-12", email: "zulfikar.ali@instansi.go.id", telepon: "081234567845" },
-    { id: 46, nip: "198611192011082046", nama: "Ayu Tingting, S.H., M.H.", dept: "Hukum & Kepatuhan", jabatan: "Konsultan Hukum Internal", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-08-29", email: "ayu.tingting@instansi.go.id", telepon: "081234567846" },
-    { id: 47, nip: "199512062019081047", nama: "Baim Wong, S.Kom.", dept: "Teknologi Informasi", jabatan: "Data Analyst", golongan: "III/b", status: "Aktif", tglMasuk: "2019-08-19", email: "baim.wong@instansi.go.id", telepon: "081234567847" },
-    { id: 48, nip: "199203232016112048", nama: "Cinta Laura, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Analis Investasi & Kas", golongan: "III/c", status: "Aktif", tglMasuk: "2016-11-28", email: "cinta.laura@instansi.go.id", telepon: "081234567848" },
-    { id: 49, nip: "199610152020061049", nama: "Desta Mahendra, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Fasilitator Budaya Kerja", golongan: "III/a", status: "Aktif", tglMasuk: "2020-06-08", email: "desta.m@instansi.go.id", telepon: "081234567849" },
-    { id: 50, nip: "198805012012102050", nama: "Enzy Storia, S.T.", dept: "Operasional & Logistik", jabatan: "Kepala Pemeliharaan Fasilitas", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-10-15", email: "enzy.storia@instansi.go.id", telepon: "081234567850" },
-    { id: 51, nip: "199409282018121051", nama: "Fedi Nuril, S.Sos.", dept: "Pemasaran & Humas", jabatan: "Koordinator Layanan Informasi", golongan: "III/b", status: "Aktif", tglMasuk: "2018-12-10", email: "fedi.nuril@instansi.go.id", telepon: "081234567851" },
-    { id: 52, nip: "199002142014042052", nama: "Gisella Anastasia, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Staf Dokumentasi Hukum", golongan: "III/d", status: "Aktif", tglMasuk: "2014-04-21", email: "gisella.a@instansi.go.id", telepon: "081234567852" },
-    { id: 53, nip: "199904072023061053", nama: "Hadian Putra, S.TI.", dept: "Teknologi Informasi", jabatan: "DevOps Engineer", golongan: "III/a", status: "Aktif", tglMasuk: "2023-06-05", email: "hadian.putra@instansi.go.id", telepon: "081234567853" },
-    { id: 54, nip: "199307192017112054", nama: "Isyana Sarasvati, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Spesialis Rekonsiliasi Bank", golongan: "III/c", status: "Aktif", tglMasuk: "2017-11-13", email: "isyana.s@instansi.go.id", telepon: "081234567854" },
-    { id: 55, nip: "199706252022011055", nama: "Jefri Nichol, S.M.", dept: "Sumber Daya Manusia", jabatan: "Staf Rekrutmen Digital", golongan: "III/a", status: "Aktif", tglMasuk: "2022-01-17", email: "jefri.nichol@instansi.go.id", telepon: "081234567855" }
+    { id: 1, nip: "198503122010011001", nama: "Dr. Hendra Wijaya, M.Kom.", dept: "Teknologi Informasi", jabatan: "Chief Technology Officer", golongan: "IV/b", status: "Aktif", tglMasuk: "2010-01-15", email: "hendra.wijaya@nusantaradigital.co.id", telepon: "081234567801" },
+    { id: 2, nip: "198807242012122002", nama: "Siti Rahmawati, S.E., M.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Finance & Billing Manager", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-12-01", email: "siti.rahmawati@nusantaradigital.co.id", telepon: "081234567802" },
+    { id: 3, nip: "199001152014031003", nama: "Budi Santoso, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Tech Talent Acquisition Lead", golongan: "III/d", status: "Aktif", tglMasuk: "2014-03-10", email: "budi.santoso@nusantaradigital.co.id", telepon: "081234567803" },
+    { id: 4, nip: "199105092015022004", nama: "Dewi Lestari, S.T.", dept: "Operasional & Logistik", jabatan: "Data Center Operations Lead", golongan: "III/c", status: "Aktif", tglMasuk: "2015-02-18", email: "dewi.lestari@nusantaradigital.co.id", telepon: "081234567804" },
+    { id: 5, nip: "199211302016041005", nama: "Ahmad Fauzi, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Enterprise Account Executive", golongan: "III/c", status: "Cuti", tglMasuk: "2016-04-05", email: "ahmad.fauzi@nusantaradigital.co.id", telepon: "081234567805" },
+    { id: 6, nip: "198709182011012006", nama: "Rina Kartika, S.H., M.H.", dept: "Hukum & Kepatuhan", jabatan: "Data Privacy & Legal Counsel", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-01-20", email: "rina.kartika@nusantaradigital.co.id", telepon: "081234567806" },
+    { id: 7, nip: "199402142018011007", nama: "Rizky Pratama, S.Kom.", dept: "Teknologi Informasi", jabatan: "Cloud Solutions Architect", golongan: "III/b", status: "Aktif", tglMasuk: "2018-01-12", email: "rizky.pratama@nusantaradigital.co.id", telepon: "081234567807" },
+    { id: 8, nip: "199506212019032008", nama: "Nadia Putri, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "SaaS Revenue & Tax Specialist", golongan: "III/b", status: "Aktif", tglMasuk: "2019-03-01", email: "nadia.putri@nusantaradigital.co.id", telepon: "081234567808" },
+    { id: 9, nip: "199308112017051009", nama: "Dimas Saputra, S.M.", dept: "Sumber Daya Manusia", jabatan: "People Operations Specialist", golongan: "III/c", status: "Aktif", tglMasuk: "2017-05-15", email: "dimas.saputra@nusantaradigital.co.id", telepon: "081234567809" },
+    { id: 10, nip: "198912042013081010", nama: "Eko Prasetyo, S.T.", dept: "Operasional & Logistik", jabatan: "Hardware Deployment Supervisor", golongan: "III/d", status: "Aktif", tglMasuk: "2013-08-22", email: "eko.prasetyo@nusantaradigital.co.id", telepon: "081234567810" },
+    { id: 11, nip: "199604172020022011", nama: "Fitri Handayani, S.Sos.", dept: "Pemasaran & Humas", jabatan: "Product Marketing Specialist", golongan: "III/a", status: "Aktif", tglMasuk: "2020-02-10", email: "fitri.handayani@nusantaradigital.co.id", telepon: "081234567811" },
+    { id: 12, nip: "199103252015061012", nama: "Galih Permana, S.H.", dept: "Hukum & Kepatuhan", jabatan: "IT Governance & Compliance Officer", golongan: "III/c", status: "Aktif", tglMasuk: "2015-06-19", email: "galih.permana@nusantaradigital.co.id", telepon: "081234567812" },
+    { id: 13, nip: "199708092021011013", nama: "Ilham Ramadhan, S.Kom.", dept: "Teknologi Informasi", jabatan: "Fullstack Software Engineer", golongan: "III/a", status: "Aktif", tglMasuk: "2021-01-04", email: "ilham.ramadhan@nusantaradigital.co.id", telepon: "081234567813" },
+    { id: 14, nip: "199511122019022014", nama: "Maya Anggraini, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Project Cost Controller", golongan: "III/b", status: "Cuti", tglMasuk: "2019-02-14", email: "maya.anggraini@nusantaradigital.co.id", telepon: "081234567814" },
+    { id: 15, nip: "199007032014091015", nama: "Taufik Hidayat, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Technical Learning & L&D Lead", golongan: "III/d", status: "Aktif", tglMasuk: "2014-09-01", email: "taufik.hidayat@nusantaradigital.co.id", telepon: "081234567815" },
+    { id: 16, nip: "199205192016072016", nama: "Wulan Dari, S.T.", dept: "Operasional & Logistik", jabatan: "Field Implementation Coordinator", golongan: "III/c", status: "Aktif", tglMasuk: "2016-07-11", email: "wulan.dari@nusantaradigital.co.id", telepon: "081234567816" },
+    { id: 17, nip: "199801282022031017", nama: "Yoga Pratama, S.Ds.", dept: "Pemasaran & Humas", jabatan: "Brand & Digital Visual Designer", golongan: "III/a", status: "Aktif", tglMasuk: "2022-03-01", email: "yoga.pratama@nusantaradigital.co.id", telepon: "081234567817" },
+    { id: 18, nip: "198604142010122018", nama: "Yuni Astuti, S.H., M.Kn.", dept: "Hukum & Kepatuhan", jabatan: "Enterprise SLA & Contract Analyst", golongan: "IV/a", status: "Aktif", tglMasuk: "2010-12-06", email: "yuni.astuti@nusantaradigital.co.id", telepon: "081234567818" },
+    { id: 19, nip: "199310052018031019", nama: "Fajar Nugroho, S.TI.", dept: "Teknologi Informasi", jabatan: "Database Reliability Engineer", golongan: "III/b", status: "Aktif", tglMasuk: "2018-03-19", email: "fajar.nugroho@nusantaradigital.co.id", telepon: "081234567819" },
+    { id: 20, nip: "199609122020082020", nama: "Anisa Rahma, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Financial Reporting Analyst", golongan: "III/a", status: "Aktif", tglMasuk: "2020-08-17", email: "anisa.rahma@nusantaradigital.co.id", telepon: "081234567820" },
+    { id: 21, nip: "198802222012041021", nama: "Bayu Setiawan, S.E.", dept: "Sumber Daya Manusia", jabatan: "HRIS & Workforce Manager", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-04-02", email: "bayu.setiawan@nusantaradigital.co.id", telepon: "081234567821" },
+    { id: 22, nip: "199407162018092022", nama: "Citra Kirana, S.Log.", dept: "Operasional & Logistik", jabatan: "IT Vendor & Procurement Specialist", golongan: "III/b", status: "Aktif", tglMasuk: "2018-09-10", email: "citra.kirana@nusantaradigital.co.id", telepon: "081234567822" },
+    { id: 23, nip: "199112082015111023", nama: "Deni Kurniawan, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Tech Summit & Event Lead", golongan: "III/c", status: "Non-Aktif", tglMasuk: "2015-11-23", email: "deni.kurniawan@nusantaradigital.co.id", telepon: "081234567823" },
+    { id: 24, nip: "199503302019062024", nama: "Elsa Safitri, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Intellectual Property & Licensing Officer", golongan: "III/b", status: "Aktif", tglMasuk: "2019-06-15", email: "elsa.safitri@nusantaradigital.co.id", telepon: "081234567824" },
+    { id: 25, nip: "199711112021071025", nama: "Farhan Maulana, S.Kom.", dept: "Teknologi Informasi", jabatan: "Cybersecurity & SOC Engineer", golongan: "III/a", status: "Aktif", tglMasuk: "2021-07-01", email: "farhan.maulana@nusantaradigital.co.id", telepon: "081234567825" },
+    { id: 26, nip: "198906072013022026", nama: "Gita Gutawa, S.E., M.M.", dept: "Keuangan & Akuntansi", jabatan: "Accounting & Treasury Supervisor", golongan: "III/d", status: "Aktif", tglMasuk: "2013-02-11", email: "gita.gutawa@nusantaradigital.co.id", telepon: "081234567826" },
+    { id: 27, nip: "199601192020041027", nama: "Hafizah Nur, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Employee Experience Specialist", golongan: "III/a", status: "Aktif", tglMasuk: "2020-04-20", email: "hafizah.nur@nusantaradigital.co.id", telepon: "081234567827" },
+    { id: 28, nip: "199004252014061028", nama: "Irfan Hakim, S.T.", dept: "Operasional & Logistik", jabatan: "Network Infrastructure & Rack Lead", golongan: "III/d", status: "Aktif", tglMasuk: "2014-06-09", email: "irfan.hakim@nusantaradigital.co.id", telepon: "081234567828" },
+    { id: 29, nip: "199309142017082029", nama: "Julia Perez, S.Sos.", dept: "Pemasaran & Humas", jabatan: "Corporate Relations & PR Lead", golongan: "III/c", status: "Aktif", tglMasuk: "2017-08-14", email: "julia.perez@nusantaradigital.co.id", telepon: "081234567829" },
+    { id: 30, nip: "198712292011051030", nama: "Kevin Sanjaya, S.H.", dept: "Hukum & Kepatuhan", jabatan: "Regulatory & Risk Advisory Lead", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-05-02", email: "kevin.sanjaya@nusantaradigital.co.id", telepon: "081234567830" },
+    { id: 31, nip: "199805032022082031", nama: "Larasati Putri, S.Kom.", dept: "Teknologi Informasi", jabatan: "Product UI/UX Designer", golongan: "III/a", status: "Aktif", tglMasuk: "2022-08-08", email: "larasati.putri@nusantaradigital.co.id", telepon: "081234567831" },
+    { id: 32, nip: "199208172016091032", nama: "Muhammad Iqbal, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "Internal IT & Finance Auditor", golongan: "III/c", status: "Aktif", tglMasuk: "2016-09-19", email: "m.iqbal@nusantaradigital.co.id", telepon: "081234567832" },
+    { id: 33, nip: "199412212018112033", nama: "Novita Sari, S.M.", dept: "Sumber Daya Manusia", jabatan: "Compensation & Benefits Analyst", golongan: "III/b", status: "Aktif", tglMasuk: "2018-11-05", email: "novita.sari@nusantaradigital.co.id", telepon: "081234567833" },
+    { id: 34, nip: "198810102012071034", nama: "Oki Setiana, S.T.", dept: "Operasional & Logistik", jabatan: "Managed Services Operations Manager", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-07-16", email: "oki.setiana@nusantaradigital.co.id", telepon: "081234567834" },
+    { id: 35, nip: "199703152021092035", nama: "Putri Marino, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Digital Content & Growth Strategist", golongan: "III/a", status: "Cuti", tglMasuk: "2021-09-13", email: "putri.marino@nusantaradigital.co.id", telepon: "081234567835" },
+    { id: 36, nip: "199106282015041036", nama: "Qori Sandioriva, S.H.", dept: "Hukum & Kepatuhan", jabatan: "ISO 27001 & Compliance Analyst", golongan: "III/c", status: "Aktif", tglMasuk: "2015-04-27", email: "qori.sandioriva@nusantaradigital.co.id", telepon: "081234567836" },
+    { id: 37, nip: "199509092019101037", nama: "Reza Rahadian, S.Kom.", dept: "Teknologi Informasi", jabatan: "Cloud Platform Engineer", golongan: "III/b", status: "Aktif", tglMasuk: "2019-10-07", email: "reza.rahadian@nusantaradigital.co.id", telepon: "081234567837" },
+    { id: 38, nip: "199011242014122038", nama: "Shinta Bachir, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Accounts Receivable & Payable Lead", golongan: "III/d", status: "Aktif", tglMasuk: "2014-12-01", email: "shinta.bachir@nusantaradigital.co.id", telepon: "081234567838" },
+    { id: 39, nip: "199607022020111039", nama: "Tio Pakusadewo, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Engineering Career & Culture Specialist", golongan: "III/a", status: "Aktif", tglMasuk: "2020-11-16", email: "tio.pakusadewo@nusantaradigital.co.id", telepon: "081234567839" },
+    { id: 40, nip: "199304182017022040", nama: "Ussy Sulistiawaty, S.T.", dept: "Operasional & Logistik", jabatan: "System Integration Project Coordinator", golongan: "III/c", status: "Aktif", tglMasuk: "2017-02-20", email: "ussy.s@nusantaradigital.co.id", telepon: "081234567840" },
+    { id: 41, nip: "199809272023011041", nama: "Vino Bastian, S.Kom.", dept: "Teknologi Informasi", jabatan: "Enterprise Helpdesk & L2 Engineer", golongan: "III/a", status: "Aktif", tglMasuk: "2023-01-09", email: "vino.bastian@nusantaradigital.co.id", telepon: "081234567841" },
+    { id: 42, nip: "198901132013052042", nama: "Winda Viska, S.Ak.", dept: "Keuangan & Akuntansi", jabatan: "IT Asset & Inventory Controller", golongan: "III/d", status: "Aktif", tglMasuk: "2013-05-13", email: "winda.viska@nusantaradigital.co.id", telepon: "081234567842" },
+    { id: 43, nip: "199405292018041043", nama: "Xavier Malik, S.M.", dept: "Sumber Daya Manusia", jabatan: "Payroll & Time Attendance Specialist", golongan: "III/b", status: "Aktif", tglMasuk: "2018-04-23", email: "xavier.malik@nusantaradigital.co.id", telepon: "081234567843" },
+    { id: 44, nip: "199108042015092044", nama: "Yasmine Wildblood, S.Log.", dept: "Operasional & Logistik", jabatan: "Supply Chain & Device Logistics Analyst", golongan: "III/c", status: "Non-Aktif", tglMasuk: "2015-09-14", email: "yasmine.w@nusantaradigital.co.id", telepon: "081234567844" },
+    { id: 45, nip: "199702112021041045", nama: "Zulfikar Ali, S.I.Kom.", dept: "Pemasaran & Humas", jabatan: "Technical Documentation & Media Officer", golongan: "III/a", status: "Aktif", tglMasuk: "2021-04-12", email: "zulfikar.ali@nusantaradigital.co.id", telepon: "081234567845" },
+    { id: 46, nip: "198611192011082046", nama: "Ayu Tingting, S.H., M.H.", dept: "Hukum & Kepatuhan", jabatan: "Corporate & Vendor Legal Specialist", golongan: "IV/a", status: "Aktif", tglMasuk: "2011-08-29", email: "ayu.tingting@nusantaradigital.co.id", telepon: "081234567846" },
+    { id: 47, nip: "199512062019081047", nama: "Baim Wong, S.Kom.", dept: "Teknologi Informasi", jabatan: "Data & BI Analytics Engineer", golongan: "III/b", status: "Aktif", tglMasuk: "2019-08-19", email: "baim.wong@nusantaradigital.co.id", telepon: "081234567847" },
+    { id: 48, nip: "199203232016112048", nama: "Cinta Laura, S.E.", dept: "Keuangan & Akuntansi", jabatan: "Budgeting & FP&A Analyst", golongan: "III/c", status: "Aktif", tglMasuk: "2016-11-28", email: "cinta.laura@nusantaradigital.co.id", telepon: "081234567848" },
+    { id: 49, nip: "199610152020061049", nama: "Desta Mahendra, S.Psi.", dept: "Sumber Daya Manusia", jabatan: "Agile Team & Culture Facilitator", golongan: "III/a", status: "Aktif", tglMasuk: "2020-06-08", email: "desta.m@nusantaradigital.co.id", telepon: "081234567849" },
+    { id: 50, nip: "198805012012102050", nama: "Enzy Storia, S.T.", dept: "Operasional & Logistik", jabatan: "Facility & Infrastructure Maintenance Lead", golongan: "IV/a", status: "Aktif", tglMasuk: "2012-10-15", email: "enzy.storia@nusantaradigital.co.id", telepon: "081234567850" }
 ];
 
-const STORAGE_KEY = 'simpeg_employees_v2';
+const STORAGE_KEY = 'simpeg_employees_nusantara_v1';
+const AUTH_KEY = 'simpeg_admin_session_v1';
 let employees = [];
 let currentPage = 1;
 const rowsPerPage = 15;
 let manualEmailEdited = false;
 
 function initApp() {
+    applyCompanyBranding();
+
+    const session = localStorage.getItem(AUTH_KEY);
+    if (session) {
+        try {
+            const parsed = JSON.parse(session);
+            if (parsed && parsed.loggedIn) {
+                enterDashboard(parsed.adminName || ADMIN_CREDENTIALS.displayName);
+                return;
+            }
+        } catch (_) {
+            localStorage.removeItem(AUTH_KEY);
+        }
+    }
+    showLoginScreen();
+}
+
+function applyCompanyBranding() {
+    document.title = `SIMPEG Cloud - ${COMPANY_NAME}`;
+    const loginComp = document.getElementById('loginCompanyName');
+    const navComp = document.getElementById('navbarCompanyName');
+    const bannerComp = document.getElementById('bannerCompanyName');
+    if (loginComp) loginComp.textContent = COMPANY_NAME;
+    if (navComp) navComp.textContent = COMPANY_NAME;
+    if (bannerComp) bannerComp.textContent = COMPANY_NAME;
+}
+
+function showLoginScreen() {
+    document.getElementById('appShell').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+}
+
+function enterDashboard(adminName) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appShell').classList.remove('hidden');
+    document.getElementById('activeAdminLabel').textContent = adminName;
+
     const storedData = localStorage.getItem(STORAGE_KEY);
     if (storedData) {
         employees = JSON.parse(storedData);
@@ -75,12 +116,50 @@ function initApp() {
     renderAll();
 }
 
+function showDashboardSection() {
+    const sec = document.getElementById('dashboardSection');
+    if (sec) {
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    renderAll();
+}
+
+function fillDemoAdmin() {
+    document.getElementById('loginUsername').value = ADMIN_CREDENTIALS.username;
+    document.getElementById('loginPassword').value = ADMIN_CREDENTIALS.password;
+    document.getElementById('loginError').classList.add('hidden');
+}
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const user = document.getElementById('loginUsername').value.trim();
+    const pass = document.getElementById('loginPassword').value;
+
+    if (user === ADMIN_CREDENTIALS.username && pass === ADMIN_CREDENTIALS.password) {
+        document.getElementById('loginError').classList.add('hidden');
+        localStorage.setItem(AUTH_KEY, JSON.stringify({
+            loggedIn: true,
+            adminName: ADMIN_CREDENTIALS.displayName
+        }));
+        enterDashboard(ADMIN_CREDENTIALS.displayName);
+    } else {
+        document.getElementById('loginError').classList.remove('hidden');
+    }
+});
+
+function logoutAdmin() {
+    localStorage.removeItem(AUTH_KEY);
+    document.getElementById('loginForm').reset();
+    document.getElementById('loginError').classList.add('hidden');
+    showLoginScreen();
+}
+
 function saveToStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
 }
 
 function resetData() {
-    if (confirm("Kembalikan data ke 55 data pegawai awal? Semua perubahan manual akan dihapus.")) {
+    if (confirm(`Kembalikan data ke 50 data pegawai awal ${COMPANY_NAME}? Semua perubahan manual akan dihapus.`)) {
         employees = [...initialEmployees];
         saveToStorage();
         currentPage = 1;
@@ -302,7 +381,7 @@ function syncAutoContact() {
         .filter(Boolean)
         .slice(0, 2)
         .join('.');
-    document.getElementById('empEmail').value = cleaned ? `${cleaned}@instansi.go.id` : `pegawai.${employees.length + 1}@instansi.go.id`;
+    document.getElementById('empEmail').value = cleaned ? `${cleaned}@nusantaradigital.co.id` : `pegawai.${employees.length + 1}@nusantaradigital.co.id`;
 }
 
 document.getElementById('empEmail').addEventListener('input', () => {
@@ -319,11 +398,11 @@ function openModal(isEdit = false) {
         document.getElementById('employeeForm').reset();
         document.getElementById('empId').value = '';
         document.getElementById('empNip').value = generateAutoNip();
-        document.getElementById('empJabatan').value = 'Staf Administrasi';
+        document.getElementById('empJabatan').value = 'Software & Systems Engineer';
         document.getElementById('empGolongan').value = 'III/a';
         document.getElementById('empStatus').value = 'Aktif';
         document.getElementById('empTglMasuk').value = new Date().toISOString().split('T')[0];
-        document.getElementById('empEmail').value = `pegawai.${employees.length + 1}@instansi.go.id`;
+        document.getElementById('empEmail').value = `pegawai.${employees.length + 1}@nusantaradigital.co.id`;
         document.getElementById('empTelepon').value = generateAutoPhone();
     } else {
         document.getElementById('autoFillNotice').classList.add('hidden');
@@ -410,6 +489,7 @@ function viewDetail(id) {
             </div>
         </div>
         <div class="grid grid-cols-2 gap-y-2.5 pt-2">
+            <span class="text-slate-500">Perusahaan:</span><span class="font-medium text-slate-800">${escapeHtml(COMPANY_NAME)}</span>
             <span class="text-slate-500">Departemen:</span><span class="font-medium text-slate-800">${escapeHtml(emp.dept)}</span>
             <span class="text-slate-500">Jabatan:</span><span class="font-medium text-slate-800">${escapeHtml(emp.jabatan)}</span>
             <span class="text-slate-500">Golongan:</span><span class="font-medium text-slate-800">${escapeHtml(emp.golongan)}</span>
@@ -452,7 +532,7 @@ function exportPDF() {
 
     doc.setFontSize(15);
     doc.setTextColor(30, 41, 59);
-    doc.text("LAPORAN DATA PEGAWAI - SIMPEG CLOUD", 14, 15);
+    doc.text(`LAPORAN DATA PEGAWAI - ${COMPANY_NAME.toUpperCase()}`, 14, 15);
 
     doc.setFontSize(9.5);
     doc.setTextColor(100, 116, 139);
@@ -496,7 +576,7 @@ function exportPDF() {
         });
     });
 
-    doc.save(`Laporan_SIMPEG_${groupLabelMap[activeGroupBy]}.pdf`);
+    doc.save(`Laporan_SIMPEG_Nusantara_Digital_${groupLabelMap[activeGroupBy]}.pdf`);
 }
 
 // Event Listeners Pencarian, Filter & Pengelompokan
